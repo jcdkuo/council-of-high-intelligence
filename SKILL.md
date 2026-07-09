@@ -204,11 +204,19 @@ Follow these steps in order. Do NOT skip steps or merge rounds.
 4. If `--profile [name]` → use that profile's panel, optionally with `--triad` from profile-specific triads
 5. If none of the above → **Auto-Triad Selection**: read the problem statement, match against triad domain keywords and rationales, select the best-fitting triad. State your selection and reasoning before proceeding.
 
+**Custom Persona Augmentation** (applies only when step 2 or step 5 above resolved a specific `domain` — an explicit `--triad [domain]` or an auto-selected triad; skip entirely for `--full`, `--members`, and `--profile` panels, which are already explicit choices):
+1. List agent files matching `~/.claude/agents/council-*.md` whose name is NOT one of the 18 official members in the table above.
+2. For each such custom agent, read its `council.triads` frontmatter list. If it contains the resolved `domain`, the agent is a candidate.
+3. Zero candidates → panel is unchanged, proceed with the triad as selected.
+4. Exactly one candidate → add it to the panel as an additional seat. It does not replace any existing triad member.
+5. More than one candidate → never add more than one. Read the problem statement against each candidate's `council.domain` and `council.polarity` fields and pick the single best-fitting one. State which candidate you picked and why at the CHECKPOINT below.
+6. Before adding any candidate (from case 4 or 5), check its `council.reasoning_method` against the Method diversity rule below: if it duplicates the `reasoning_method` of a member already on the panel, do not add it — record "custom persona skipped (reasoning_method collision with {member})" instead.
+
 **Designate the domain-weight seat (do this NOW, before any analysis).** Identify the single member whose domain most directly matches the problem — this member receives a **1.5× weight** at tie-breaking (STEP 6). Lock it here, at panel selection, *before* any positions exist. Selecting the heavyweight after seeing votes would let the coordinator nudge the outcome; selecting it up front keeps tie-breaking honest. If two members are equally on-domain, pick neither — record "no domain-weight seat (ambiguous match)" and tie-break on equal weights.
 
 **Method diversity (DMAD, arXiv:2410.12853).** Every member carries a distinct `reasoning_method` in its frontmatter `council:` block — an explicit reasoning method, not just a persona. When substituting or swapping members (fallbacks, `--members` overrides, seat changes), the coordinator must preserve method diversity: never assemble a panel where two seats share the same `reasoning_method`.
 
-`[CHECKPOINT]` State the selected members, mode, and the designated domain-weight seat (member + 1.5× + one-line rationale, or "none — ambiguous match") before proceeding.
+`[CHECKPOINT]` State the selected members (including any custom-persona augmentation and its one-line rationale, or "no custom persona matched" or "skipped — reasoning_method collision"), mode, and the designated domain-weight seat (member + 1.5× + one-line rationale, or "none — ambiguous match") before proceeding.
 
 ### STEP 1: Provider Detection and Model Routing
 
