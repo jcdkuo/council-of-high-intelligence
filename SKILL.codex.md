@@ -98,14 +98,14 @@ For `--duo` without explicit members, choose a polarity pair from keywords:
 
 ### Step 2.1: Custom Persona Augmentation
 
-Applies only when panel selection resolved a specific `domain` — an explicit `--triad [domain]` or an auto-selected triad (see "If no panel flag is present, auto-select the best triad from problem context" above). Skip for `--full`, `--members`, and `--profile`.
+Applies only when panel selection resolved a specific `domain` — an explicit `--triad [domain]` or an auto-selected triad (see "If no panel flag is present, auto-select the best triad from problem context" above). Skip for `--full`, `--members`, `--profile`, and `--duo` (duo is a fixed two-member pair; augmentation never applies to it). This means `quick` mode (which has no early bypass in this file, unlike SKILL.md) can also receive an augmented seat when it resolves a domain via `--triad` or auto-selection — this is intentional.
 
 1. List files matching `council-*.md` in the council assets directory resolved in Step 1 (`~/.codex/skills/council/agents/` or `./agents/`), excluding names in the Member Roster above.
 2. For each such custom agent, read its `council.triads` frontmatter list. If it contains the resolved `domain`, it is a candidate.
 3. Zero candidates → panel unchanged.
 4. Exactly one candidate → add it to the panel as an additional seat (does not replace any triad member).
 5. More than one candidate → never add more than one. Pick the single best-fitting one by reading the problem statement against each candidate's `council.domain` and `council.polarity` fields; state which one and why.
-6. Before adding any candidate (case 4 or 5), check its `council.reasoning_method` against the other panel members' `reasoning_method` values (method diversity, per the Round 1 directive in Step 4 below) — if it duplicates one already on the panel, do not add it; note the skip and why.
+6. Before adding any candidate (case 4 or 5), check its `council.reasoning_method` against the other panel members' `reasoning_method` values (method diversity — no two seats on the panel may share a `reasoning_method`) — if it duplicates one already on the panel, do not add it; note the skip and why.
 
 ### Step 2.5: Runtime Reliability Defaults
 
