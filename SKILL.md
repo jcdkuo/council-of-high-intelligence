@@ -205,7 +205,7 @@ Follow these steps in order. Do NOT skip steps or merge rounds.
 5. If none of the above → **Auto-Triad Selection**: read the problem statement, match against triad domain keywords and rationales, select the best-fitting triad. State your selection and reasoning before proceeding.
 
 **Custom Persona Augmentation** (applies only when step 2 or step 5 above resolved a specific `domain` — an explicit `--triad [domain]` or an auto-selected triad; skip entirely for `--full`, `--members`, and `--profile` panels, which are already explicit choices):
-1. List agent files matching `~/.claude/agents/council-*.md` whose name is NOT one of the 18 official members in the table above.
+1. List agent files matching `council-*.md` in the resolved agents directory (e.g., `~/.claude/agents/`, `${CLAUDE_PLUGIN_ROOT}/agents/`, or `./agents/` in order of asset resolution) whose name is NOT one of the 18 official members in the table above.
 2. For each such custom agent, read its `council.triads` frontmatter list. If it contains the resolved `domain`, the agent is a candidate.
 3. Zero candidates → panel is unchanged, proceed with the triad as selected.
 4. Exactly one candidate → add it to the panel as an additional seat. It does not replace any existing triad member.
@@ -604,7 +604,7 @@ Fast 2-round deliberation for simpler questions. No cross-examination.
 
 Same panel selection as full mode Step 0. If no panel specified, default to best-matching triad via auto-selection.
 
-`[CHECKPOINT]` State selected members.
+`[CHECKPOINT]` State the selected members (including any custom-persona augmentation and its one-line rationale, or "no custom persona matched" or "skipped — reasoning_method collision"), mode, and the designated domain-weight seat (member + 1.5× + one-line rationale, or "none — ambiguous match") before proceeding.
 
 ### QUICK STEP 0.5: Problem Restate Gate
 

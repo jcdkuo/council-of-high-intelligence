@@ -72,7 +72,7 @@ If no panel flag is present, auto-select the best triad from problem context.
 
 Resolve council files in this order:
 
-1. `~/.gemini/extensions/council-of-high-intelligence/skills/council/agents/`
+1. `~/.gemini/extensions/council/skills/council/agents/`
 2. `./agents/`
 
 If neither exists, stop and tell the user to run `./install.sh --gemini`.
@@ -95,6 +95,17 @@ For `--duo` without explicit members, choose a polarity pair from keywords:
 - ai/ml/model: `karpathy` + `sutskever`
 - decision/bias: `kahneman` + `feynman`
 - default fallback: `socrates` + `feynman`
+
+### Step 2.1: Custom Persona Augmentation
+
+Applies only when panel selection resolved a specific `domain` — an explicit `--triad [domain]` or an auto-selected triad. Skip entirely for `--full`, `--members`, `--profile`, and `--duo` modes. This means `quick` mode can also receive an augmented seat when it resolves a domain via `--triad` or auto-selection.
+
+1. List files matching `council-*.md` in the resolved agents directory from Step 1 (`~/.gemini/extensions/council/skills/council/agents/` or `./agents/`), excluding names in the Member Roster above.
+2. For each such custom agent, read its `council.triads` frontmatter list. If it contains the resolved `domain`, it is a candidate.
+3. Zero candidates → panel is unchanged.
+4. Exactly one candidate → add it to the panel as an additional seat (does not replace any existing triad member).
+5. More than one candidate → never add more than one. Read the problem statement against each candidate's `council.domain` and `council.polarity` fields and pick the single best-fitting one. State which candidate you picked and why.
+6. Before adding any candidate (case 4 or 5), check its `council.reasoning_method` against the other panel members' `reasoning_method` values (method diversity): if it duplicates the `reasoning_method` of a member already on the panel, do not add it; note the skip and why.
 
 ### Step 2.5: Runtime Reliability Defaults
 

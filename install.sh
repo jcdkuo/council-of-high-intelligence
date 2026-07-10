@@ -279,7 +279,7 @@ fi
 
 if [[ "${INSTALL_GEMINI}" == true ]]; then
   echo
-  GEMINI_EXT_ROOT="${GEMINI_DIR}/extensions/council-of-high-intelligence"
+  GEMINI_EXT_ROOT="${GEMINI_DIR}/extensions/council"
   GEMINI_EXT_DEST_DIR="${GEMINI_EXT_ROOT}/skills/council"
   GEMINI_SKILL_DEST="${GEMINI_EXT_DEST_DIR}/SKILL.md"
   GEMINI_AGENTS_DEST_DIR="${GEMINI_EXT_DEST_DIR}/agents"
@@ -294,7 +294,7 @@ if [[ "${INSTALL_GEMINI}" == true ]]; then
   if [[ "$DRY_RUN" == false ]]; then
     cat <<EOF > "${GEMINI_EXT_ROOT}/gemini-extension.json"
 {
-  "name": "council-of-high-intelligence",
+  "name": "council",
   "version": "${PROJECT_VERSION}",
   "description": "Council of High Intelligence multiple persona deliberation system"
 }

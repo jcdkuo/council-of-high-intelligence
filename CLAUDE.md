@@ -7,7 +7,7 @@
 - `SKILL.gemini.md` — Gemini CLI-specific council coordinator protocol (compressed mirror of SKILL.md)
 - `SKILL.opencode.md` — opencode-specific council coordinator protocol (mirror of SKILL.md)
 - `agents/council-*.md` — 18 member personas with YAML frontmatter
-- `install.sh` — installs to `~/.claude/`, optionally `~/.codex/skills/council/`, `~/.gemini/extensions/council-of-high-intelligence/`, and `~/.config/opencode/`
+- `install.sh` — installs to `~/.claude/`, optionally `~/.codex/skills/council/`, `~/.gemini/extensions/council/`, and `~/.config/opencode/`
 - `configs/` — provider/model routing templates
 - `demos/` — example prompts and scoring rubric
 - `scripts/` — validation checklist
