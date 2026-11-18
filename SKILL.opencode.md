@@ -35,7 +35,7 @@ You are the Council Coordinator. Your job is to convene the right council member
 | `--models [path]` | Manual provider/model slot mapping (overrides auto-routing) |
 | `--no-auto-route` | Disable auto-routing; use agent frontmatter defaults (single-provider fallback) |
 | `--dry-route` | Print the routing table without running the council |
-| `--chairman [name]` | Override the Chairman who synthesizes the verdict (e.g. `gemini`, `opus`, `gpt-5.4`). Defaults to highest-tier non-panel provider — see STEP 1.6. |
+| `--chairman [name]` | Override the Chairman who synthesizes the verdict (e.g. `gemini`, `opus`, `gpt-6.2-astra`). Defaults to highest-tier non-panel provider — see STEP 1.6. |
 
 Flag priority: `--quick` / `--duo` set the mode. `--full` / `--triad` / `--members` / `--profile` set the panel. `--models` overrides auto-routing. `--no-auto-route`, `--dry-route`, and `--chairman` are additive.
 
@@ -236,7 +236,7 @@ The Chairman is the synthesizer — a named, audited role distinct from the deli
 
 **Selection algorithm** (apply in order — first match wins):
 
-1. **Explicit override**: If `--chairman <name>` was passed, use it. `<name>` can be a provider tag (`anthropic`, `openai`, `google`, `ollama`, `nvidia_nim`, `cursor_cli`) or a model alias (`opus`, `sonnet`, `gpt-5.4`, `gemini-2.5-pro`).
+1. **Explicit override**: If `--chairman <name>` was passed, use it. `<name>` can be a provider tag (`anthropic`, `openai`, `google`, `ollama`, `nvidia_nim`, `cursor_cli`) or a model alias (`opus`, `sonnet`, `gpt-6.2-astra`, `gemini-4-argon-medium`).
 2. **Config override**: If `configs/auto-route-defaults.yaml` has a non-null `chairman:` block, use it.
 3. **Auto-select** (default): Pick the highest-tier model among detected providers, **preferring a provider not already on the panel** when possible. Tie-breaker: provider listed first in the detected-providers JSON.
 4. **Single-provider fallback**: If only one provider is detected, use that provider's highest tier (`opus` by default). Note in the verdict that the Chairman shares a provider with one or more panel members.
@@ -246,8 +246,8 @@ The Chairman is the synthesizer — a named, audited role distinct from the deli
 | Provider | Default Chairman model |
 |---|---|
 | anthropic | `opus` |
-| openai | `gpt-5.4` |
-| google | `gemini-2.5-pro` |
+| openai | `gpt-6.2-astra` |
+| google | `gemini-4-argon-medium` |
 | ollama | first available local model |
 | nvidia_nim | `deepseek-ai/deepseek-v4-pro` |
 | cursor_cli | `gpt-5.4-high` |
@@ -277,7 +277,7 @@ Run all members **IN PARALLEL**. Each member sees ONLY the problem statement (bl
 2. Extract the **Identity**, **Grounding Protocol**, and relevant **Output Format** sections (trimmed — skip Analytical Method, What You See/Miss, When Deliberating)
 3. Build the full prompt with identity inlined, then run:
 ```bash
-codex exec -c model="{model}" -c auto_approve=true "{full prompt}" 2>/dev/null
+codex exec -c model="{model}" -c model_reasoning_effort=medium -c auto_approve=true "{full prompt}" 2>/dev/null </dev/null
 ```
 4. Capture stdout as the member's output. Timeout: 60 seconds.
 
@@ -307,7 +307,7 @@ cursor-agent -p --mode ask --model {model} --output-format text "{full prompt}" 
 4. Capture stdout as the member's output. Timeout: 90 seconds.
 5. If stdout is empty or the command exits non-zero, treat as a failed call and apply the Fallback rule.
 
-Cursor is a model **aggregator** — one binary (`cursor-agent`) serves GPT-5.x, Claude, Gemini, and Grok families. For provider-spread purposes it counts as a single provider, but a seat routed to Cursor's `claude-*` model shares Anthropic's training bias with native `anthropic` seats. Prefer cross-family Cursor models (e.g. `gpt-5.4-high`, `gemini-2.5-pro`, `grok-4`) when Cursor is filling a diversity seat. Verify live model IDs with `cursor-agent --list-models`.
+Cursor is a model **aggregator** — one binary (`cursor-agent`) serves GPT-5.x, Claude, Gemini, and Grok families. For provider-spread purposes it counts as a single provider, but a seat routed to Cursor's `claude-*` model shares Anthropic's training bias with native `anthropic` seats. Prefer cross-family Cursor models (e.g. `gpt-5.4-high`, `gemini-3-pro`, `grok-4`) when Cursor is filling a diversity seat. Verify live model IDs with `cursor-agent --list-models`.
 
 **For `openai_compatible_api` (NVIDIA NIM, Together, Fireworks, vLLM, any OpenAI-compatible endpoint)** — run via Bash tool:
 1. Read and extract identity sections (same as codex_exec above).

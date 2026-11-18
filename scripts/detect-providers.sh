@@ -48,7 +48,7 @@ providers+=("$(json_provider "anthropic" "true" "subagent" "native" '"opus","son
 # OpenAI via Codex CLI
 codex_bin="$(check_command codex)"
 if [[ -n "$codex_bin" ]] && run_with_timeout codex --version >/dev/null 2>&1; then
-  providers+=("$(json_provider "openai" "true" "codex_exec" "$codex_bin" '"gpt-5.4"')")
+  providers+=("$(json_provider "openai" "true" "codex_exec" "$codex_bin" '"gpt-6.2-astra","gpt-6.2-sol"')")
 else
   providers+=("$(json_provider "openai" "false" "codex_exec" "${codex_bin:-not_found}" '')")
 fi
@@ -56,7 +56,7 @@ fi
 # Google via Gemini CLI
 gemini_bin="$(check_command gemini)"
 if [[ -n "$gemini_bin" ]] && run_with_timeout gemini --version >/dev/null 2>&1; then
-  providers+=("$(json_provider "google" "true" "gemini_cli" "$gemini_bin" '"gemini-3-pro"')")
+  providers+=("$(json_provider "google" "true" "gemini_cli" "$gemini_bin" '"gemini-4-argon-medium","gemini-4-hydrogen-medium"')")
 else
   providers+=("$(json_provider "google" "false" "gemini_cli" "${gemini_bin:-not_found}" '')")
 fi

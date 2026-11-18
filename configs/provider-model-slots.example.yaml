@@ -19,11 +19,11 @@ seats:
     reasoning_mode: analytical
   feynman:
     provider: openai
-    model: gpt-5.4
+    model: gpt-6.2-astra
     reasoning_mode: mechanistic
   sun-tzu:
     provider: google
-    model: gemini-3-pro
+    model: gemini-4-argon-medium
     reasoning_mode: strategic
   machiavelli:
     provider: xai
@@ -31,7 +31,7 @@ seats:
     reasoning_mode: adversarial
   ada:
     provider: openai
-    model: gpt-5.4
+    model: gpt-6.2-astra
     reasoning_mode: formal
   lao-tzu:
     provider: anthropic
@@ -39,11 +39,11 @@ seats:
     reasoning_mode: emergent
   aurelius:
     provider: google
-    model: gemini-3-pro
+    model: gemini-4-argon-medium
     reasoning_mode: normative
   torvalds:
     provider: openai
-    model: gpt-5.4
+    model: gpt-6.2-astra
     reasoning_mode: pragmatic
 
 fallback:

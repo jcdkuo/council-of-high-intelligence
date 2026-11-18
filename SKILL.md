@@ -35,7 +35,7 @@ You are the Council Coordinator. Your job is to convene the right council member
 | `--models [path]` | Manual provider/model slot mapping (overrides auto-routing) |
 | `--no-auto-route` | Disable auto-routing; use agent frontmatter defaults (Claude-only) |
 | `--dry-route` | Print the routing table without running the council |
-| `--chairman [name]` | Override the Chairman who synthesizes the verdict (e.g. `gemini`, `opus`, `gpt-5.4`). Defaults to highest-tier non-panel provider — see STEP 1.6. |
+| `--chairman [name]` | Override the Chairman who synthesizes the verdict (e.g. `gemini`, `opus`, `gpt-6.2-astra`). Defaults to highest-tier non-panel provider — see STEP 1.6. |
 
 Flag priority: `--quick` / `--duo` set the mode. `--full` / `--triad` / `--members` / `--profile` set the panel. `--models` overrides auto-routing. `--no-auto-route`, `--dry-route`, and `--chairman` are additive.
 
@@ -276,7 +276,7 @@ The Chairman is the synthesizer — a named, audited role distinct from the deli
 
 **Selection algorithm** (apply in order — first match wins):
 
-1. **Explicit override**: If `--chairman <name>` was passed, use it. `<name>` can be a provider tag (`anthropic`, `openai`, `google`, `ollama`, `nvidia_nim`, `cursor_cli`) or a model alias (`opus`, `sonnet`, `gpt-5.4`, `gemini-3-pro`).
+1. **Explicit override**: If `--chairman <name>` was passed, use it. `<name>` can be a provider tag (`anthropic`, `openai`, `google`, `ollama`, `nvidia_nim`, `cursor_cli`) or a model alias (`opus`, `sonnet`, `gpt-6.2-astra`, `gemini-4-argon-medium`).
 2. **Config override**: If `configs/auto-route-defaults.yaml` has a non-null `chairman:` block, use it.
 3. **Auto-select** (default): Pick the highest-tier model among detected providers, **preferring a provider not already on the panel** when possible. Tie-breaker: provider listed first in the detected-providers JSON.
 4. **Single-provider fallback**: If only one provider is detected (Claude-only), use that provider's highest tier (`opus` by default). Note in the verdict that the Chairman shares a provider with one or more panel members.
@@ -286,8 +286,8 @@ The Chairman is the synthesizer — a named, audited role distinct from the deli
 | Provider | Default Chairman model |
 |---|---|
 | anthropic | `opus` |
-| openai | `gpt-5.4` |
-| google | `gemini-3-pro` |
+| openai | `gpt-6.2-astra` |
+| google | `gemini-4-argon-medium` |
 | ollama | first available local model |
 | nvidia_nim | `deepseek-ai/deepseek-v4-pro` |
 | cursor_cli | `gpt-5.4-high` |
@@ -311,6 +311,7 @@ Run all members **IN PARALLEL**. Each member sees ONLY the problem statement (bl
 **For `subagent` (Anthropic)** — spawn as Claude Code subagent:
 - Use `subagent_type` matching the council member's agent name (agents are in ~/.claude/agents/)
 - Use the `model` parameter from the routing table (opus/sonnet/haiku) to override the agent's default if needed
+- Always pass `effort: medium` on the Agent call (members and Chairman alike) so Anthropic seats match the OpenAI/Google seats
 
 **For `codex_exec` (OpenAI)** — run via Bash tool:
 1. Read the member's agent file at `~/.claude/agents/council-{name}.md`
@@ -321,7 +322,7 @@ PROMPT_FILE="$(mktemp)"
 cat > "$PROMPT_FILE" <<'COUNCIL_PROMPT_EOF'
 {full prompt}
 COUNCIL_PROMPT_EOF
-codex exec -c model="{model}" -c auto_approve=true "$(cat "$PROMPT_FILE")" 2>/dev/null
+codex exec -c model="{model}" -c model_reasoning_effort=medium -c auto_approve=true "$(cat "$PROMPT_FILE")" 2>/dev/null </dev/null
 rm -f "$PROMPT_FILE"
 ```
 4. Capture stdout as the member's output. Timeout: 60 seconds.
